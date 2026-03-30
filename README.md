@@ -220,9 +220,59 @@ nanobot onboard
 }
 ```
 
+### 4. 配置 `~/.nanobot/config.json`
+
+#### 设置 API Key
+
+```json
+{
+  "providers": {
+    "deepseek": {
+      "apiKey": "YOUR_API_KEY"
+    }
+  }
+}
+```
+
+#### 设置模型（支持切换）
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "model": "YOUR_MODEL",
+      "provider": "auto"
+    }
+  }
+}
+```
+
 ---
 
-### 5. 启动 Agent
+### 5. 配置 Agent Prompt 与 Skills
+
+为了让 Agent 能够按规则调用本地 RAG，需要在 `~/.nanobot/workspace/` 中补充对应的 Prompt / Skill 文件，例如：
+
+* `AGENT.md`
+* `tools/rag.md`
+* `skills/rag-assistant/SKILL.md`
+
+这些文件用于约束 Agent 的 tool call 行为，规定何时调用本地 RAG、如何调用，以及如何返回结果。
+
+
+#### 说明
+
+* `AGENT.md`：定义 Agent 的总体行为规则
+* `tools/rag.md`：说明本地 RAG 工具的用途与调用方式
+* `skills/rag-assistant/SKILL.md`：在 skills/rag-assistant/ 中补充了技能说明文件，用于约束 Agent 在特定场景下的 tool call 规则。
+
+通过这些文件，Agent 可以在检测到 `[USE_RAG]` 前缀时，稳定调用本地 RAG 接口，而不是直接基于通用模型回答。
+
+
+
+---
+
+### 6. 启动 Agent
 
 ```bash
 nanobot agent
